@@ -5,9 +5,6 @@
 
 
 from flask import Flask , jsonify , request , render_template , url_for , _request_ctx_stack
-import pyspark,csv,matplotlib.pyplot as plt
-from pyspark import SparkContext, SparkConf
-import statistics as stat,math,sys,os
 import graduation
 #sc=SparkContext()
 app = Flask(__name__)
