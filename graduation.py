@@ -180,7 +180,7 @@ def main(accountFromWeb,passwordFromWeb,CPEPointFromWeb):
     for course in arrayOfOtherDepartmentCourse:
         for keyword in exceptKeyword:
             if course.find(keyword) != -1:
-                scoreArray[6] -= int(re.findall(r'(\d+)(?!.*\d)',course))
+                scoreArray[6] -= int(re.findall(r'(\d+)(?!.*\d)',course)[0])
 
     #print(scoreArray)
     #print(selectiveCourse)
