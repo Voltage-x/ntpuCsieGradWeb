@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<!--
+	Theory by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+	<head>
+		<title>畢業門檻查詢系統</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/main.css') }}" />
+	</head>
+	<body>
+
+		<!-- Header -->
+			<header id="header">
+				<div class="inner">
+					<a href="index" class="logo">畢業門檻查詢系統</a>
+					<nav id="nav">
+						<a href="https://ohs01.ntpu.edu.tw/student_new.htm">學生資訊系統</a>
+						<a href="http://www.csie.ntpu.edu.tw/">北大資工</a>
+						<a href="https://www.ntpu.edu.tw/chinese/">台北大學</a>
+					</nav>
+					<a href="#navPanel" class="navPanelToggle"><span class="fa fa-bars"></span></a>
+				</div>
+			</header>
+
+		<!-- Banner -->
+			<section id="banner">
+				<h1>此為105學年度入學適用之畢業計算程式</h1>
+				<h3><b><font color="#FF0000">僅供參考使用，最終畢業裁定仍以資工系系辦為主<br></font><b>
+			  </h3>
+			</section>
+
+		<!-- One -->
+			<section id="one" class="wrapper">
+				<div class="inner">
+					<div class="flex flex-3">
+						<article>
+							<label>{{ data[0] }}</label>
+							<label>{{ data[1] }}</label>
+							<label>{{ data[2] }}</label>
+							<label>{{ data[3] }}</label>
+						</article>
+						<article>
+							<label>{{ data[4] }}</label>
+							<label>{{ data[5] }}</label>
+							<label>{{ data[6] }}</label>
+							<label>{{ data[7] }}</label>
+						</article>
+						<article>
+							<label>{{ data[8] }}</label>
+							<label>{{ data[9] }}</label>
+							<label>{{ data[10] }}</label>
+							<label>{{ data[11] }}</label>
+						</article>
+					</div>
+				</div>
+			</section>
+
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="inner">
+					<div class="flex">
+						<div class="copyright">
+							&copy; Designer: Vincent Wang
+						</div>
+						<ul class="icons">
+							<a href="https://github.com/Voltage-x/ntpuCsieGrad">Source Code</a>
+						</ul>
+					</div>
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+			<script src="{{ url_for('static', filename='assets/js/skel.min.js') }}"></script>
+			<script src="{{ url_for('static', filename='assets/js/util.js') }}"></script>
+			<script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
+
+	</body>
+</html>

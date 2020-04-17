@@ -1,0 +1,100 @@
+td {
+	font-family:tahoma;
+	font-size:12px;
+	color:#000000;
+	line-height:13px;
+}
+
+a {text-decoration:underline;
+   color:#295D82;}
+  
+body { 	margin:0px;padding:0px;}
+
+
+
+ul {margin:0; padding:0; list-style:none}
+li {center left no-repeat; margin:0 0 0 0px; padding:0 0 0 12px; line-height:23px }
+
+.head span { font-size:9px; font-weight:bold}
+.copy { color:#FFFFFF}
+.programs span strong { text-transform:uppercase}
+
+.category li {background:url(images/a2.gif) center left no-repeat; margin:0 0 0 0px; padding:0 0 0 23px; line-height:20px }
+.category li a { color:#FFFFFF; text-decoration:none}
+.category li a:hover {text-decoration:underline}
+.category a { color:#FFFFFF; text-decoration:none}
+.category a:hover {text-decoration:underline}
+.category strong { color:#52BCFF}
+.category span a {text-decoration:underline}
+.category span a:hover {text-decoration:none}
+
+.sport span strong { color:#FFFFFF; text-transform:uppercase; font-size:11px;}
+.sport span { font-size:9px; font-weight:bold}
+.sport strong { text-transform:uppercase}
+
+.read a { color:#555555}
+.read strong { color:#4E7D95}
+
+.m { vertical-align:middle}
+
+.form { width:263px;
+		height:18px;
+		font-family:tahoma;
+		font-size:11px;
+		border-style: solid;
+		border-width: 1px;
+		border-color:#;
+		background-color:#ffffff;
+		color:#5F5F5F;
+		margin-left:0px;
+		margin-right:0px}
+		
+.textarea { width:263px;
+		height:18px;
+		font-family:tahoma;
+		font-size:11px;
+		border-style: solid;
+		border-width: 1px;
+		border-color:#;
+		background-color:#ffffff;
+		color:#5F5F5F;
+		margin-left:0px;
+		margin-right:0px}
+		
+
+a:hover {text-decoration:none;}
+
+/************* MENU ************/
+
+#menu {
+	width: 723px;
+	margin: -2px 0px 3px 16px;
+	padding: 5px 0px 5px 0px;
+	background-color: #515151;
+}
+
+#menu ul {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+	text-align: center;
+}
+
+#menu li {
+	display: inline;
+}
+
+#menu a {
+	padding: 5px 15px;
+	text-transform: uppercase;
+	text-decoration: none;
+	font-size: 12px;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+
+#menu a:hover {
+	background-color: #B5B5B5;
+}
+
+
