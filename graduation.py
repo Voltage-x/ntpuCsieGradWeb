@@ -109,11 +109,6 @@ def calFunc(code_point,englishReview,professionalEnglishCourse,crossDegreeOfGene
         returnData.append("程式能力畢業資格已通過\n")
 
 def main(accountFromWeb,passwordFromWeb,CPEPointFromWeb):
-    returnData = []
-    scoreArray = []
-    selectiveCourse = []
-    selectiveCoreNum = [0,0,0,0]
-    languageCourse = []
     #open Chrome browser
     chrome_options = Options()
     chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
