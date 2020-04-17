@@ -113,7 +113,8 @@ def main(accountFromWeb,passwordFromWeb,CPEPointFromWeb):
     chrome_options = Options()
     chrome_options.add_argument('--headless')
     chrome_options.add_argument('--disable-gpu')
-    driver = webdriver.Chrome(options=chrome_options)
+    chromedriver = './chromedriver'
+    driver = webdriver.Chrome(chromedriver, options=chrome_options)
 
 
     #visit website
