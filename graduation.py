@@ -3,13 +3,11 @@
 
 # In[4]:
 
-
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.chrome.options import Options
-from time import sleep
+import requests
 from getpass import getpass
 import re,os
+from lxml import etree
+import lxml
 
 returnData = []
 scoreArray = []
@@ -109,94 +107,77 @@ def calFunc(code_point,englishReview,professionalEnglishCourse,crossDegreeOfGene
         returnData.append("程式能力畢業資格已通過\n")
 
 def main(accountFromWeb,passwordFromWeb,CPEPointFromWeb):
-    #open Chrome browser
-    chrome_options = Options()
-    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--no-sandbox")
-    driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
-
-
-    #visit website
-    driver.get('https://ohs01.ntpu.edu.tw/student_new.htm')
-    #get account bar
-    accountBar = driver.find_element_by_name('stud_num')
-    passwordBar = driver.find_element_by_name('passwd')
     #input account info
-    accountBar.send_keys(accountFromWeb)
-    passwordBar.send_keys(passwordFromWeb)
-    #submit
-    driver.find_element_by_id('loginBtn1').click()
-    if driver.current_url == 'https://ohs01.ntpu.edu.tw/pls/pm/stud_system.login':
-    	return(4044444)
-
+    r = requests.post('https://ohs01.ntpu.edu.tw/pls/pm/stud_system.login', data = {'stud_num': accountFromWeb,'passwd': passwordFromWeb})
+    if len(r.cookies) <= 0:
+        return(4044444)
 
     code_point = int(CPEPointFromWeb)
 
-    #go to  graduate page
-    driver.get('https://ohs01.ntpu.edu.tw/pls/univer/query_all_course.judge?func=9')
+    my_cookies = dict(STD3=r.cookies['STD3'],stud=r.cookies['stud'],tlc=r.cookies['tlc'])
+    p = requests.get('https://ohs01.ntpu.edu.tw/pls/univer/query_all_course.judge?func=9',cookies = my_cookies)
+    body = etree.HTML(p.text)
 
     #get require course info
-    arrayOfNum = driver.find_elements_by_class_name('ss1')
+    arrayOfNum = body.xpath("//th[@class='ss1']/text()")
     for grade in arrayOfNum:
-        scoreArray.append(int(re.findall(r'\d+',grade.get_attribute('innerHTML'))[0]))
+        if len(re.findall(r'(\d+)(?!.*\d)',grade)) > 0:
+            scoreArray.append(int(re.findall(r'\d+',grade)[0]))
 
     #get selective course info 
-    arrayOfSelectiveCourses = driver.find_elements_by_xpath("//td[@style='padding-right: 10px']")
+    arrayOfSelectiveCourses = body.xpath("//td[@style='padding-right: 10px']/text()")
     for course in range(0,len(arrayOfSelectiveCourses),3):
-        #print(arrayOfSelectiveCourses[course].get_attribute('innerHTML'))
-        selectiveCourse.append(arrayOfSelectiveCourses[course].get_attribute('innerHTML'))
+        selectiveCourse.append(arrayOfSelectiveCourses[course])
 
     #get language course and PE  info
-    arrayOfLanguage = driver.find_elements_by_xpath("//table[@style='border-collapse: collapse'][5]/tbody/tr/td")
+    arrayOfLanguage = body.xpath("//table[@style='border-collapse: collapse'][5]/tr/td")
+
     languageCourseOriginal = []
     for course in range(0,len(arrayOfLanguage)):
-        languageCourseOriginal.append(re.findall(r'[^\n\u3000]+',arrayOfLanguage[course].get_attribute('innerHTML')))
+        languageCourseOriginal.append(re.findall(r'[^\n\u3000]+',arrayOfLanguage[course].text))
     for courseType in range(0,len(languageCourseOriginal)):
-        if languageCourseOriginal[courseType][0] == '<img src="../../img/stopped.gif">':
-            languageCourse.append(0)
-        else:
-            languageCourse.append(len(languageCourseOriginal[courseType]))
+        languageCourse.append(len(languageCourseOriginal[courseType]))
 
     #get toeic score range
-    toeicChecker = driver.find_elements_by_xpath("//table[@style='border-collapse: collapse'][6]/tbody/tr/td/font")
-    if len(toeicChecker) > 0 and toeicChecker[0].get_attribute('innerHTML').find('免修') != -1:
+    toeicChecker = body.xpath("//table[@style='border-collapse: collapse'][6]/tr/td/font/text()")
+    if len(toeicChecker) > 0 and toeicChecker[0].find('免修') != -1:
         languageCourse[1] = 0
 
     #get english graduate review info
-    if driver.find_elements_by_xpath("//table[@style='border-collapse: collapse'][2]/tbody/tr/td/p/font")[0].get_attribute('innerHTML').find('不') == -1:
+    if body.xpath("//table[@style='border-collapse: collapse'][2]/tr/td/p/font/text()")[0].find('不') == -1:
         englishReview = 1
     else:
         englishReview =  0
 
-    #get professional english info and other course info
-    arrayOfProfessionalEnglish = driver.find_elements_by_xpath("//table[@style='border-collapse: collapse'][6]/tbody/tr/td")
-    professionalEnglishCourse = len(re.findall(r'專業英文',arrayOfProfessionalEnglish[0].get_attribute('innerHTML')))
-    scoreArray[5] -= len(re.findall(r'全民國防教育',arrayOfProfessionalEnglish[0].get_attribute('innerHTML')))*2
+    #get common course info and other course info
+    arrayOfProfessionalEnglishOriginal = body.xpath("//table[@style='border-collapse: collapse'][6]/tr/td/text()")
+    arrayOfProfessionalEnglish = []
+    for index in range(0,len(arrayOfProfessionalEnglishOriginal)-3):
+        arrayOfProfessionalEnglish += arrayOfProfessionalEnglishOriginal[index].split('\u3000')
 
     #except other course by keyword
-    arrayOfOtherDepartmentCourse = re.findall(r'[^\s]+',arrayOfProfessionalEnglish[1].get_attribute('innerHTML'))
+    arrayOfOtherDepartmentCourse = arrayOfProfessionalEnglishOriginal[len(arrayOfProfessionalEnglishOriginal)-3].split('\u3000')
     for course in arrayOfOtherDepartmentCourse:
         for keyword in exceptKeyword:
             if course.find(keyword) != -1:
                 scoreArray[6] -= int(re.findall(r'(\d+)(?!.*\d)',course)[0])
 
-    #print(scoreArray)
-    #print(selectiveCourse)
-    #print(languageCourse)
+    professionalEnglishCourse = 0
+    for course in arrayOfProfessionalEnglish:
+        if course.find('專業英文') != -1:
+            professionalEnglishCourse += 1
+        if course.find('全民國防教育') != -1:
+             scoreArray[5] -= 2
 
     #get general Education info
-    arrayOfGeneralEducation = driver.find_elements_by_xpath("//table[@style='border-collapse: collapse'][5]/tbody/tr/th/table/tbody/tr/td")
+    arrayOfGeneralEducation = body.xpath("//table[@style='border-collapse: collapse'][5]/tr/th/table/tr/td/text()")
     crossDegreeOfGeneralEducation = 0
-    for i in arrayOfGeneralEducation:
-        if len(re.findall(r'(2)',i.get_attribute('innerHTML'))) > 0:
+    for degree in arrayOfGeneralEducation:
+        if len(re.findall(r'\(\d\)',degree)) > 0:
             crossDegreeOfGeneralEducation+=1
-    #print(crossDegreeOfGeneralEducation)
 
-    generalEducationPoint = driver.find_elements_by_xpath("//table[@style='border-collapse: collapse'][5]/tbody/tr/th/table/tbody/tr/th")
-    generalEducationPoint = int(generalEducationPoint[len(generalEducationPoint)-2].get_attribute('innerHTML'))
-    #print(generalEducationPoint)
+    generalEducationPoint = body.xpath("//table[@style='border-collapse: collapse'][5]/tr/th/table/tr/th/text()")
+    generalEducationPoint = int(generalEducationPoint[len(generalEducationPoint)-2])
 
     for course in selectiveCourse:
         for coreCourseIndex in range(0,len(selectiveCoreCourseList)):
@@ -205,8 +186,7 @@ def main(accountFromWeb,passwordFromWeb,CPEPointFromWeb):
 
     if languageCourse[1] == 4:
         languageCourse[1] = 6
-
-    driver.quit()
+  
     calFunc(code_point,englishReview,professionalEnglishCourse,crossDegreeOfGeneralEducation,generalEducationPoint)
     return(returnData)
 
