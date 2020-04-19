@@ -41,18 +41,17 @@
 							<header>
 								<h3>請輸入下列資訊以繼續</h3>
 							</header>
-							<form method='post' action="/search">
+							<form method='post' action="javascript:void(0);" onSubmit="CheckPassword()">
 							<label>請輸入學生資訊系統帳號(學號)：</label>
-							<input type="text" name="account">
+							<input type="text" name="account" id="acset">
 							<label>請輸入學生資訊系統密碼：</label>
-							<input type="password" name="password">
+							<input type="password" name="password" id="pwset">
 							<label>請輸入大學程式能力檢定通過題數：</label>
-							<input type="number" name="cpe_num" min="0" max="7"><br>
-							<br><input type="submit">
-							<font color="#FF0000">{{ data }}</font>
+							<input type="number" name="cpe_num" id="cpeset" min="0" max="7"><br>
+							<br><input type="submit" id="send">
 							</form>
+							<div id="wronginfo"></div>
 						</article>
-							
 						<article>
 							<header>
 								<h3>訊息公告</h3>
@@ -85,6 +84,6 @@
 			<script src="{{ url_for('static', filename='assets/js/skel.min.js') }}"></script>
 			<script src="{{ url_for('static', filename='assets/js/util.js') }}"></script>
 			<script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
-
+			<script src="{{ url_for('static', filename='assets/js/check.js') }}"></script>
 	</body>
 </html>

@@ -24,7 +24,7 @@ def submit():
     print(request.form.get('account'))
     returnData = graduation.main(request.form.get('account'),request.form.get('password'),request.form.get('cpe_num'))
     if returnData == 4044444:
-        return render_template('index.html', data='帳號或密碼錯誤')
+        return render_template('wrongInfo.html', data='帳號或密碼錯誤！')
     else:
         return render_template('result.html', data=returnData)
 
@@ -35,4 +35,5 @@ def index():
 
 if __name__ == "__main__":
     app.run()
+
 
